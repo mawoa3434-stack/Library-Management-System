@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fine Payment</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #243447;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .card h3 {
+            color: #777;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .card h2 {
+            color: #243447;
+            font-size: 27px;
+        }
+
+        .table-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #243447;
+            color: white;
+        }
+
+        .paid {
+            color: green;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: #d97706;
+            font-weight: bold;
+        }
+
+        .pay-btn {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pay-btn:hover {
+            background: #15803d;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            background: #243447;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .message {
+            background: #e0f2fe;
+            color: #075985;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <a href="/" class="back-btn">← Back to Dashboard</a>
+
+    <h1>💰 Fine Payment Management</h1>
+    <p class="subtitle">Manage library fine payments</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="summary">
+
+        <div class="card">
+            <h3>Total Fine</h3>
+            <h2>৳ {{ total_fine }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Total Paid</h3>
+            <h2>৳ {{ total_paid }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Total Due</h3>
+            <h2>৳ {{ total_due }}</h2>
+        </div>
+
+    </div>
+
+    <div class="table-box">
+
+        <h2 style="margin-bottom: 20px;">Fine Payment List</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Student ID</th>
+                    <th>Book Name</th>
+                    <th>Fine Amount</th>
+                    <th>Status</th>
+                    <th>Payment Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for issue in issues %}
+
+                <tr>
+                    <td>{{ issue.student.name }}</td>
+                    <td>{{ issue.student.student_id }}</td>
+                    <td>{{ issue.book.title }}</td>
+                    <td>৳ {{ issue.fine_amount }}</td>
+
+                    <td>
+                        {% if issue.fine_paid %}
+                            <span class="paid">Paid</span>
+                        {% else %}
+                            <span class="pending">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if issue.fine_paid_date %}
+                            {{ issue.fine_paid_date }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if not issue.fine_paid %}
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="issue_id" value="{{ issue.id }}">
+                                <button type="submit" class="pay-btn">
+                                    Pay Fine
+                                </button>
+                            </form>
+                        {% else %}
+                            <span class="paid">Completed</span>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="7" class="empty">
+                        No fine payment records found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

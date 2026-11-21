@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Student | My Library</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #333;
+        }
+
+        .header {
+            background: #176b45;
+            color: white;
+            padding: 22px 35px;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .form-box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #00000012;
+        }
+
+        .form-box h2 {
+            color: #176b45;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #777;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #176b45;
+            box-shadow: 0 0 0 3px #176b4520;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 7px;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        .update-button {
+            background: #176b45;
+        }
+
+        .update-button:hover {
+            background: #24865a;
+        }
+
+        .cancel-button {
+            background: #777;
+        }
+
+        .cancel-button:hover {
+            background: #555;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: #176b45;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 20px;
+            }
+
+            .form-box {
+                padding: 22px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>📚 My Library</h1>
+        <p>Library Book Management System</p>
+    </div>
+
+    <div class="container">
+
+        <div class="form-box">
+
+            <h2>✏️ Edit Student Information</h2>
+
+            <p class="subtitle">
+                Update student information using the form below.
+            </p>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="name">Student Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ student.name }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="student_id">Student ID</label>
+                    <input
+                        type="text"
+                        id="student_id"
+                        name="student_id"
+                        value="{{ student.student_id }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <input
+                        type="text"
+                        id="department"
+                        name="department"
+                        value="{{ student.department }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input
+                        type="text"
+                        id="phone"
+                        name="phone"
+                        value="{{ student.phone }}"
+                        required
+                    >
+                </div>
+
+                <div class="buttons">
+
+                    <button type="submit" class="button update-button">
+                        💾 Update Student
+                    </button>
+
+                    <a href="{% url 'student_list' %}"
+                       class="button cancel-button">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <a href="{% url 'home' %}" class="back-link">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+</body>
+</html>

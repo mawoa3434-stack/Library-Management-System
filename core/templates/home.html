@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Admin Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #333;
+        }
+
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            background: #176b45;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 25px 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 30px;
+            font-size: 23px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 13px 10px;
+            border-radius: 7px;
+            margin-bottom: 7px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: #24865a;
+            padding-left: 16px;
+        }
+
+        .logout-form {
+            margin-top: 15px;
+        }
+
+        .logout-button {
+            width: 100%;
+            padding: 14px 10px;
+            background: white;
+            color: #176b45;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .logout-button:hover {
+            background: #e5f5ec;
+        }
+
+        .main {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 12px #00000010;
+        }
+
+        .header h1 {
+            color: #176b45;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #777;
+        }
+
+        .section-title {
+            color: #176b45;
+            margin-bottom: 20px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #00000010;
+            border-left: 5px solid #176b45;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .card h1 {
+            color: #176b45;
+            font-size: 32px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 400px;
+                position: relative;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+
+        <h2>📚 My Library</h2>
+
+        <a href="/">🏠 Dashboard</a>
+
+        <a href="{% url 'book_list' %}">📖 Books</a>
+
+        <a href="{% url 'add_book' %}">➕ Add Book</a>
+
+        <a href="{% url 'student_list' %}">👨‍🎓 Students</a>
+
+        <a href="{% url 'add_student' %}">➕ Add Student</a>
+
+        <a href="{% url 'issue_book' %}">📤 Issue Books</a>
+
+        <a href="{% url 'issue_list' %}">📥 Issue / Return List</a>
+
+        <a href="{% url 'fine_report' %}">💰 Fine Report</a>
+
+        <a href="{% url 'fine_payment' %}">💳 Fine Payment</a>
+
+        <form method="POST"
+              action="{% url 'logout' %}"
+              class="logout-form">
+
+            {% csrf_token %}
+
+            <button type="submit" class="logout-button">
+                🚪 Logout
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="main">
+
+        <div class="header">
+
+            <h1>Library Admin Dashboard</h1>
+
+            <p>Welcome to Library Management System!</p>
+
+        </div>
+
+        <h2 class="section-title">
+            📊 Library Overview
+        </h2>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>📚 Total Books</h3>
+                <h1>{{ total_books }}</h1>
+            </div>
+
+            <div class="card">
+                <h3>👨‍🎓 Total Students</h3>
+                <h1>{{ total_students }}</h1>
+            </div>
+
+            <div class="card">
+                <h3>📤 Issued Books</h3>
+                <h1>{{ issued_books }}</h1>
+            </div>
+
+            <div class="card">
+                <h3>✅ Returned Books</h3>
+                <h1>{{ returned_books }}</h1>
+            </div>
+
+            <div class="card">
+                <h3>💰 Total Fine</h3>
+                <h1>{{ total_fine }} ৳</h1>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p>© 2026 My Library Management System</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

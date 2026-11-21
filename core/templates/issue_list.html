@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issued Books List</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .header {
+            background: #198754;
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #e8f5ee;
+        }
+
+        .actions {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 18px;
+            background: #198754;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            background: #146c43;
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #e8f5ee;
+            color: #198754;
+        }
+
+        tr:hover {
+            background: #f8fbf9;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .issued {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .returned {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .return-btn {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 7px 12px;
+            background: #0d6efd;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .return-btn:hover {
+            background: #0b5ed7;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>📚 Issued Books List</h1>
+        <p>Manage issued and returned library books</p>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'issue_book' %}" class="btn">
+            + Issue New Book
+        </a>
+
+        <a href="{% url 'home' %}" class="btn">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <div class="table-container">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Student ID</th>
+                    <th>Book Name</th>
+                    <th>Issue Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                    <th>Fine (Taka)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for issue in issues %}
+                <tr>
+                    <td>{{ issue.student.name }}</td>
+
+                    <td>{{ issue.student.student_id }}</td>
+
+                    <td>{{ issue.book.title }}</td>
+
+                    <td>{{ issue.issue_date }}</td>
+
+                    <td>
+                        {{ issue.return_date|default:"Not Returned" }}
+                    </td>
+
+                    <td>
+                        {% if issue.return_date %}
+                            <span class="status returned">
+                                Returned
+                            </span>
+                        {% else %}
+                            <span class="status issued">
+                                Issued
+                            </span>
+
+                            <br>
+
+                            <a href="{% url 'return_book' issue.id %}"
+                               class="return-btn">
+                                Return Book
+                            </a>
+                        {% endif %}
+                    </td>
+
+                    <td>{{ issue.calculate_fine }} Taka</td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="empty">
+                        No issued books found!
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

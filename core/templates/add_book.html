@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add New Book - My Library</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #333;
+        }
+
+        .header {
+            background: #176b45;
+            color: white;
+            padding: 22px 35px;
+        }
+
+        .header h1 {
+            margin-bottom: 7px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .form-box {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px #00000012;
+        }
+
+        .form-box h2 {
+            color: #176b45;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #777;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 9px;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #176b45;
+            box-shadow: 0 0 5px #176b4530;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        button, .cancel-button {
+            padding: 13px 22px;
+            border: none;
+            border-radius: 7px;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .save-button {
+            background: #176b45;
+            color: white;
+            flex: 1;
+        }
+
+        .save-button:hover {
+            background: #24865a;
+        }
+
+        .cancel-button {
+            background: #e5e5e5;
+            color: #333;
+        }
+
+        .cancel-button:hover {
+            background: #d5d5d5;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: #176b45;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 20px;
+            }
+
+            .form-box {
+                padding: 22px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .save-button, .cancel-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>📚 My Library</h1>
+        <p>Library Book Management System</p>
+    </div>
+
+
+    <div class="container">
+
+        <div class="form-box">
+
+            <h2>➕ Add New Book</h2>
+
+            <p class="description">
+                Enter the book information below to add a new book to the library.
+            </p>
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="title">📖 Book Name</label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="Enter book name"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="author">✍️ Author Name</label>
+
+                    <input
+                        type="text"
+                        id="author"
+                        name="author"
+                        placeholder="Enter author name"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="isbn">🔢 ISBN Number</label>
+
+                    <input
+                        type="text"
+                        id="isbn"
+                        name="isbn"
+                        placeholder="Enter ISBN number"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="quantity">📦 Available Quantity</label>
+
+                    <input
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        min="1"
+                        placeholder="Enter book quantity"
+                        required
+                    >
+                </div>
+
+
+                <div class="button-group">
+
+                    <button type="submit" class="save-button">
+                        💾 Save Book
+                    </button>
+
+                    <a href="{% url 'book_list' %}" class="cancel-button">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <a href="/" class="back-link">
+            ← Back to Dashboard
+        </a>
+
+
+        <div class="footer">
+            © 2026 My Library Management System
+        </div>
+
+    </div>
+
+</body>
+</html>

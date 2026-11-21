@@ -1,0 +1,500 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - My Library</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #333;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #176b45;
+            color: white;
+            padding: 25px 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 35px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 14px 10px;
+            margin-bottom: 8px;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .sidebar a:hover {
+            background: #24865a;
+        }
+
+        .logout-button {
+            width: 100%;
+            padding: 14px 10px;
+            margin-top: 20px;
+            background: white;
+            color: #176b45;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 15px;
+            text-align: left;
+        }
+
+        .logout-button:hover {
+            background: #e5f5ec;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 240px;
+            padding: 30px;
+        }
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px #00000010;
+        }
+
+        .header h1 {
+            color: #176b45;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px #00000010;
+        }
+
+        .section h2 {
+            color: #176b45;
+            margin-bottom: 20px;
+        }
+
+        /* Profile */
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #f0f8f3;
+            padding: 18px;
+            border-radius: 8px;
+        }
+
+        .info-box h4 {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        /* Fine */
+        .fine-box {
+            background: #fff5e8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .fine-box h3 {
+            color: #a65c00;
+            margin-bottom: 8px;
+        }
+
+        /* Search */
+        .search-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .search-form input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .search-form button {
+            padding: 12px 22px;
+            background: #176b45;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .search-form button:hover {
+            background: #24865a;
+        }
+
+        /* Book Cards */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .book-card {
+            border: 1px solid #e5e5e5;
+            padding: 20px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 5px 15px #00000012;
+        }
+
+        .book-card h3 {
+            color: #176b45;
+            margin-bottom: 12px;
+        }
+
+        .book-card p {
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .quantity {
+            display: inline-block;
+            background: #e5f5ec;
+            color: #176b45;
+            padding: 7px 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #176b45;
+            color: white;
+        }
+
+        .status {
+            display: inline-block;
+            background: #e5f5ec;
+            color: #176b45;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .not-returned {
+            background: #fff0e8;
+            color: #b45309;
+        }
+
+        .footer {
+            text-align: center;
+            color: #888;
+            padding: 20px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <h2>📚 My Library</h2>
+
+        <a href="#dashboard">🏠 Dashboard</a>
+        <a href="#profile">👤 My Profile</a>
+        <a href="#books">📖 Available Books</a>
+        <a href="#issued">📋 My Issued Books</a>
+        <a href="#fine">💰 Fine Information</a>
+
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">
+                🚪 Logout
+            </button>
+        </form>
+
+    </div>
+
+
+    <!-- Main Content -->
+    <div class="main">
+
+        <!-- Dashboard Header -->
+        <div class="header" id="dashboard">
+
+            <h1>Welcome, {{ request.user.username }}! 👋</h1>
+
+            <p>Welcome to your Student Library Dashboard.</p>
+
+        </div>
+
+
+        <!-- Student Profile -->
+        <div class="section" id="profile">
+
+            <h2>👤 My Profile</h2>
+
+            {% if student %}
+
+            <div class="profile-info">
+
+                <div class="info-box">
+                    <h4>Student Name</h4>
+                    <p>{{ student.name }}</p>
+                </div>
+
+                <div class="info-box">
+                    <h4>Student ID</h4>
+                    <p>{{ student.student_id }}</p>
+                </div>
+
+                <div class="info-box">
+                    <h4>Department</h4>
+                    <p>{{ student.department }}</p>
+                </div>
+
+                <div class="info-box">
+                    <h4>Phone</h4>
+                    <p>{{ student.phone }}</p>
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <p>Your student profile is not linked to this account.</p>
+
+            {% endif %}
+
+
+            <!-- Fine Information -->
+            <div class="fine-box" id="fine">
+
+                <h3>💰 My Total Fine</h3>
+
+                <h2>{{ total_fine }} Taka</h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- Available Books -->
+        <div class="section" id="books">
+
+            <h2>📖 Available Books</h2>
+
+            <form method="GET" class="search-form">
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search by book title or author..."
+                    value="{{ query }}"
+                >
+
+                <button type="submit">🔍 Search</button>
+
+            </form>
+
+
+            <div class="book-grid">
+
+                {% for book in books %}
+
+                <div class="book-card">
+
+                    <h3>{{ book.title }}</h3>
+
+                    <p>
+                        <strong>Author:</strong>
+                        {{ book.author }}
+                    </p>
+
+                    <p>
+                        <strong>ISBN:</strong>
+                        {{ book.isbn }}
+                    </p>
+
+                    <span class="quantity">
+                        Available Quantity: {{ book.quantity }}
+                    </span>
+
+                </div>
+
+                {% empty %}
+
+                <p>No books found.</p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- My Issued Books -->
+        <div class="section" id="issued">
+
+            <h2>📋 My Issued Books</h2>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Book Name</th>
+                            <th>Author</th>
+                            <th>Issue Date</th>
+                            <th>Return Date</th>
+                            <th>Status</th>
+                            <th>Fine</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for issue in issues %}
+
+                        <tr>
+
+                            <td>{{ issue.book.title }}</td>
+
+                            <td>{{ issue.book.author }}</td>
+
+                            <td>{{ issue.issue_date }}</td>
+
+                            <td>
+                                {% if issue.return_date %}
+                                    {{ issue.return_date }}
+                                {% else %}
+                                    Not Returned Yet
+                                {% endif %}
+                            </td>
+
+                            <td>
+
+                                {% if issue.return_date %}
+
+                                    <span class="status">
+                                        Returned
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status not-returned">
+                                        Issued
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                {{ issue.calculate_fine }} Taka
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="6">
+                                You have not issued any books yet.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- Footer -->
+        <div class="footer">
+
+            <p>© 2026 My Library Management System</p>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
