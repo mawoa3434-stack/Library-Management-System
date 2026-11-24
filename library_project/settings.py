@@ -23,6 +23,7 @@ ALLOWED_HOSTS = [
 
 # Render automatically provides this hostname
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
@@ -69,9 +70,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'library_project.wsgi.application'
 
 # Database
-DATABASE_URL = os.environ.get("DATABASE_URL")
+DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
 
-if DATABASE_URL:
+if DATABASE_URL.startswith(("postgresql://", "postgres://")):
     DATABASES = {
         'default': dj_database_url.parse(
             DATABASE_URL,
@@ -112,6 +113,7 @@ USE_TZ = True
 # Static Files
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -123,6 +125,7 @@ STORAGES = {
 
 # CSRF
 CSRF_TRUSTED_ORIGINS = []
+
 if RENDER_EXTERNAL_HOSTNAME:
     CSRF_TRUSTED_ORIGINS.append(
         f"https://{RENDER_EXTERNAL_HOSTNAME}"
